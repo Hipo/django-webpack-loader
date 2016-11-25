@@ -53,7 +53,11 @@ class WebpackLoader(object):
         relpath = '{0}{1}'.format(
             self.config['BUNDLE_DIR_NAME'], chunk['name']
         )
-        return settings.STATIC_URL + relpath
+        bundle_root_url = self.config.get('BUNDLE_ROOT_URL')
+        if bundle_root_url is not None:
+            return bundle_root_url + relpath
+        else:
+            return staticfiles_storage.url(relpath)
 
     def get_bundle(self, bundle_name):
         assets = self.get_assets()
